@@ -1,0 +1,34 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+
+spring:
+  datasource:
+    initialization-mode: always
+    driver-class-name: org.postgresql.Driver
+    username: blogappuser
+    password: blogapp
+    url: jdbc:postgresql://localhost:5432/blogapp
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+  h2:
+    console:
+      enabled: true
+
+
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /api-docs/swagger-ui.html
+
+blogapp:
+  jwt:
+    secretKey: blogappJwtSecretKey
+    duration: 600000
+
