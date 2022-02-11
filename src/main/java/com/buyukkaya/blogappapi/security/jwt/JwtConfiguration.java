@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.buyukkaya.blogappapi.security.exception.JwtTokenParsingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Configuration
 public class JwtConfiguration {
 
@@ -38,7 +40,7 @@ public class JwtConfiguration {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        //TODO: ADD LOGS HERE.
+        log.info("Generated JWT for user {}.", userDetails.getUsername());
 
         return JWT.create().withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + duration))
@@ -48,15 +50,12 @@ public class JwtConfiguration {
                 sign(algorithm);
 
 
-
-
     }
 
     public Map<String, Object> parseToken(String jwt) throws JwtTokenParsingException {
 
         if (jwt == null || !jwt.startsWith("Bearer ")) {
 
-            //TODO: ADD LOGS HERE.
             throw new JWTDecodeException("Invalid jwt token");
 
         } else {

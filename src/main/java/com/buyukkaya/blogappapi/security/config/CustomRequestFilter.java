@@ -2,6 +2,7 @@ package com.buyukkaya.blogappapi.security.config;
 
 import com.buyukkaya.blogappapi.security.jwt.JwtConfiguration;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,7 @@ import java.util.Map;
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+@Slf4j
 @RequiredArgsConstructor
 public class CustomRequestFilter extends OncePerRequestFilter {
 
@@ -34,20 +36,20 @@ public class CustomRequestFilter extends OncePerRequestFilter {
 
         try {
 
-            Map<String, Object> tokenMap = jwtConfiguration.parseToken(jwt);
-            userDetailsService.loadUserByUsername((String) tokenMap.get("username"));
+            Map<String, Object> parsedToken = jwtConfiguration.parseToken(jwt);
+            userDetailsService.loadUserByUsername((String) parsedToken.get("username"));
 
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            stream((String[]) tokenMap.get("role")).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+            stream((String[]) parsedToken.get("role")).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(tokenMap.get("username"), null, authorities);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(parsedToken.get("username"), null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authToken);
 
             filterChain.doFilter(request, response);
 
         } catch (Exception e) {
 
-            //TODO: ADD LOGS HERE.
+            log.error("Error while filtering request with error message {}", e.getMessage());
             response.setHeader("error", e.getMessage());
             response.sendError(403);
 

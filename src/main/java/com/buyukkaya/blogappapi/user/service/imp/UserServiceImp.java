@@ -7,11 +7,13 @@ import com.buyukkaya.blogappapi.user.repository.UserRepository;
 import com.buyukkaya.blogappapi.user.service.RoleService;
 import com.buyukkaya.blogappapi.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImp implements UserService {
@@ -30,11 +32,13 @@ public class UserServiceImp implements UserService {
 
             userRepository.save(userEntity);
 
-            //TODO: ADD LOGS HERE.
+            log.info("User registration successful. Username= {}, Email= {} and with an encoded password."
+                    , registerRequest.getUsername(), registerRequest.getEmail());
             return RegisterResponse.builder().message("Registration successful.").build();
 
         } catch (Exception e) {
-            //TODO: ADD LOGS HERE
+
+            log.error("Error while registration process with error message: {} ", e.getMessage());
             return RegisterResponse.builder().message(e.getMessage()).build();
         }
 
