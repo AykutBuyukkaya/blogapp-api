@@ -1,6 +1,6 @@
 package com.buyukkaya.blogappapi.user.service.imp;
 
-import com.buyukkaya.blogappapi.user.model.entity.User;
+import com.buyukkaya.blogappapi.user.model.entity.UserEntity;
 import com.buyukkaya.blogappapi.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +16,9 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " is not found!"));
-        return UserDetailsImp.build(user);
+        return UserDetailsImp.build(userEntity);
     }
 
 }

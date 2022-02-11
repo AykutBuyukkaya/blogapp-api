@@ -1,8 +1,5 @@
 server:
   port: 8080
-  servlet:
-    context-path: /api
-
 
 spring:
   datasource:
@@ -11,9 +8,10 @@ spring:
     username: blogappuser
     password: blogapp
     url: jdbc:postgresql://localhost:5432/blogapp
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     database: postgresql
   h2:
     console:
@@ -30,5 +28,5 @@ springdoc:
 blogapp:
   jwt:
     secretKey: blogappJwtSecretKey
-    duration: 600000
+    duration: 360000
 

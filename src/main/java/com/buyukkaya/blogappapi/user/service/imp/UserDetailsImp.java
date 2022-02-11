@@ -1,17 +1,16 @@
 package com.buyukkaya.blogappapi.user.service.imp;
 
-import com.buyukkaya.blogappapi.user.model.entity.User;
+import com.buyukkaya.blogappapi.user.model.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+
 @RequiredArgsConstructor
 public class UserDetailsImp implements UserDetails {
 
@@ -22,15 +21,23 @@ public class UserDetailsImp implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
 
 
-    public static UserDetailsImp build(User user){
+    public static UserDetailsImp build(UserEntity userEntity) {
 
-        List<GrantedAuthority> authorities = user.getRole().stream()
+        List<GrantedAuthority> authorities = userEntity.getRole().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
-        return new UserDetailsImp(user.getId(),
-                user.getUsername(), user.getEmail(), user.getPassword(), authorities);
+        return new UserDetailsImp(userEntity.getId(),
+                userEntity.getUsername(), userEntity.getEmail(), userEntity.getPassword(), authorities);
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override

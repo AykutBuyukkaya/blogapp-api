@@ -1,24 +1,18 @@
 package com.buyukkaya.blogappapi.user.model.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
-import javax.validation.constraints.Email;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegisterRequest {
 
-    @NonNull
     private String username;
 
-    @NonNull
     private String password;
 
-    @Email
-    @NonNull
     private String email;
 
-    
 }

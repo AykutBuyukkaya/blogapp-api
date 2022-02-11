@@ -1,17 +1,14 @@
 package com.buyukkaya.blogappapi.user.model.request;
 
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginRequest {
 
-    @NonNull
     private String username;
 
-    @NonNull
     private String password;
 
 }

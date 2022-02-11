@@ -11,14 +11,14 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
-    @Column(name = "username", unique = true, updatable = true)
+    @Column(name = "username", unique = true)
     private String username;
 
     @Email
