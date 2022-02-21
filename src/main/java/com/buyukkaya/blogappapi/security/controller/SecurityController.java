@@ -1,10 +1,9 @@
 package com.buyukkaya.blogappapi.security.controller;
 
+import com.buyukkaya.blogappapi.common.model.response.ApiResponse;
 import com.buyukkaya.blogappapi.security.service.AuthenticationService;
 import com.buyukkaya.blogappapi.user.model.request.LoginRequest;
 import com.buyukkaya.blogappapi.user.model.request.RegisterRequest;
-import com.buyukkaya.blogappapi.user.model.response.LoginResponse;
-import com.buyukkaya.blogappapi.user.model.response.RegisterResponse;
 import com.buyukkaya.blogappapi.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +23,14 @@ public class SecurityController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest){
+    public ResponseEntity<ApiResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         return ResponseEntity.ok(authenticationService.login(loginRequest));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest registerRequest){
+    public ResponseEntity<ApiResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.registerUser(registerRequest));
     }
+
 
 }

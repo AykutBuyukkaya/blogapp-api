@@ -1,5 +1,6 @@
 package com.buyukkaya.blogappapi.user.service.imp;
 
+import com.buyukkaya.blogappapi.user.exception.RoleNotFoundException;
 import com.buyukkaya.blogappapi.user.model.entity.Role;
 import com.buyukkaya.blogappapi.user.repository.RoleRepository;
 import com.buyukkaya.blogappapi.user.service.RoleService;
@@ -18,10 +19,12 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
-    public Role getRoleByName(String name) throws RuntimeException {
+    public Role getRoleByName(String name) throws RoleNotFoundException {
 
         return roleRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Role with name " + name + " is not found!"));
+                .orElseThrow(() -> new RoleNotFoundException("Role with name " + name + " is not found!"));
 
     }
+
+
 }

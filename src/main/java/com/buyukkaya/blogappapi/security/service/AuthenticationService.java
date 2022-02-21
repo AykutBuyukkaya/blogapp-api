@@ -1,10 +1,17 @@
 package com.buyukkaya.blogappapi.security.service;
 
+import com.buyukkaya.blogappapi.common.model.response.ApiResponse;
 import com.buyukkaya.blogappapi.user.model.request.LoginRequest;
-import com.buyukkaya.blogappapi.user.model.response.LoginResponse;
+
+import javax.naming.NoPermissionException;
 
 public interface AuthenticationService {
 
-    LoginResponse login(LoginRequest loginRequest);
+    ApiResponse login(LoginRequest loginRequest);
+
+    boolean checkUserAuthentication(String username);
+
+    void isUserAdmin() throws NoPermissionException;
 
 }
+
