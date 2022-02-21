@@ -13,4 +13,8 @@ public interface BlogService {
 
     ApiResponse getUserBlogs(int page, int size, String sortDirection, String sortTo, String username);
 
+    ApiResponse updateBlog(Long id, CreateBlogRequest blogRequest);
+
+    ApiResponse deleteBlog(Long id);
+
 }

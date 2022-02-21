@@ -32,7 +32,8 @@ public class Blog {
     @Column(name = "created_at")
     private String createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userEntity_id")
     private UserEntity userEntity;
 
 }

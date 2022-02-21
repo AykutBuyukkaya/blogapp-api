@@ -33,5 +33,23 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getBlogById(id));
     }
 
+    @GetMapping("/user-blogs/{username}")
+    public ResponseEntity<ApiResponse> getUserBlogs(@RequestParam("page") int page, @RequestParam("size") int size,
+                                                    @RequestParam("sortTo") String sortTo, @RequestParam("sortDir") String sortDir,
+                                                    @PathVariable("username") String username) {
+        return ResponseEntity.ok(blogService.getUserBlogs(page, size, sortTo, sortDir, username));
+    }
+
+    @PatchMapping("/{blogId}")
+    public ResponseEntity<ApiResponse> updateBlog(@PathVariable("blogId") Long id,
+                                                  @RequestBody @Valid CreateBlogRequest createBlogRequest) {
+        return ResponseEntity.ok(blogService.updateBlog(id, createBlogRequest));
+    }
+
+    @DeleteMapping("/{blogId}")
+    public ResponseEntity<ApiResponse> deleteBlog(@PathVariable("blogId") Long id) {
+        return ResponseEntity.ok(blogService.deleteBlog(id));
+    }
+
 
 }

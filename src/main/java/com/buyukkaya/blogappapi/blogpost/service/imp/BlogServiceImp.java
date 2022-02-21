@@ -61,10 +61,7 @@ public class BlogServiceImp implements BlogService {
         } catch (Exception e) {
 
             log.error("Error while creating a blogpost for user {}. Error message = {}", request.getUsername(), e.getMessage());
-            return ApiResponse.builder()
-                    .message(e.getMessage())
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
+            return createResponseWithException(e.getMessage());
         }
 
     }
@@ -95,10 +92,7 @@ public class BlogServiceImp implements BlogService {
 
         } catch (Exception e) {
 
-            return ApiResponse.builder()
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .message(e.getMessage())
-                    .build();
+            return createResponseWithException(e.getMessage());
 
         }
 
@@ -116,6 +110,60 @@ public class BlogServiceImp implements BlogService {
                 .response(blogRepository.findAllByUserEntity(userEntity, pageRequest))
                 .build();
 
+    }
+
+    @Override
+    public ApiResponse updateBlog(Long id, CreateBlogRequest createBlogRequest) {
+
+        try {
+
+            Blog blog = blogRepository.getById(id);
+
+            blog.setBody(createBlogRequest.getBody());
+            blog.setTitle(createBlogRequest.getTitle());
+
+            blogRepository.save(blog);
+
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK)
+                    .message("Post with id " + id + " successfully updated.")
+                    .build();
+
+        } catch (Exception e) {
+
+            return createResponseWithException(e.getMessage());
+
+        }
+
+
+    }
+
+    @Override
+    public ApiResponse deleteBlog(Long id) {
+
+        try {
+
+            blogRepository.deleteById(id);
+
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK)
+                    .message("Blog with id" + id + " deleted successfully")
+                    .build();
+
+        } catch (Exception e) {
+            return createResponseWithException(e.getMessage());
+        }
+
+
+    }
+
+
+    private ApiResponse createResponseWithException(String message) {
+
+        return ApiResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .message(message)
+                .build();
     }
 
 
