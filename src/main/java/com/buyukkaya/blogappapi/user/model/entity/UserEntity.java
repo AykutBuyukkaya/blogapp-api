@@ -24,26 +24,28 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")
-    @JsonIgnore
-    List<Blog> posts;
-
     @Email
     @NonNull
     @Column(name = "email", unique = true)
     private String email;
+
     @NonNull
     @Column(name = "username", unique = true)
     @Size(min = 3, max = 16)
     private String username;
 
     @NonNull
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> role = new ArrayList<>();
-    @NonNull
     @Column(name = "password")
     @JsonIgnore
     @Size(min = 8, max = 64)
     private String password;
+
+    @NonNull
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> role = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userEntity")
+    @JsonIgnore
+    List<Blog> posts;
 
 }
