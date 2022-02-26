@@ -24,8 +24,8 @@ public class BlogController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getBlogs(@RequestParam("page") int page, @RequestParam("size") int size,
-                                                @RequestParam("sortOrder") String sortOrder, @RequestParam("sortTo") String sortTo) {
-        return ResponseEntity.ok(blogService.getBlogs(page, size, sortOrder, sortTo));
+                                                @RequestParam("sortDir") String sortDir, @RequestParam("sortTo") String sortTo) {
+        return ResponseEntity.ok(blogService.getBlogs(page, size, sortDir, sortTo));
     }
 
     @GetMapping("/{blogId}")
@@ -34,10 +34,10 @@ public class BlogController {
     }
 
     @GetMapping("/user-blogs/{username}")
-    public ResponseEntity<ApiResponse> getUserBlogs(@RequestParam("page") int page, @RequestParam("size") int size,
-                                                    @RequestParam("sortTo") String sortTo, @RequestParam("sortDir") String sortDir,
-                                                    @PathVariable("username") String username) {
-        return ResponseEntity.ok(blogService.getUserBlogs(page, size, sortTo, sortDir, username));
+    public ResponseEntity<ApiResponse> getUserBlogs(@PathVariable("username") String username,
+                                                    @RequestParam("page") int page, @RequestParam("size") int size,
+                                                    @RequestParam(value = "sortDir", defaultValue = "DESC") String sortDir, @RequestParam(value = "sortTo", defaultValue = "createdAt") String sortTo) {
+        return ResponseEntity.ok(blogService.getUserBlogs(page, size, sortDir, sortTo, username));
     }
 
     @PatchMapping("/{blogId}")

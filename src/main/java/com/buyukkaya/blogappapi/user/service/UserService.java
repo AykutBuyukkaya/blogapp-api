@@ -12,8 +12,11 @@ public interface UserService {
 
     void addBlogToUser(String username, Blog blog);
 
-    ApiResponse updateUser(Long id, RegisterRequest registerRequest);
+    ApiResponse updateUser(String username, RegisterRequest registerRequest);
 
     ApiResponse getAllUsers(int page, int size, String sortDirection, String sortTo);
+
+    ApiResponse deleteUser(String username);
+
 
 }

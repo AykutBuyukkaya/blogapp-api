@@ -28,5 +28,5 @@ springdoc:
 blogapp:
   jwt:
     secretKey: blogappJwtSecretKey
-    duration: 360000
+    duration: 1800000
 

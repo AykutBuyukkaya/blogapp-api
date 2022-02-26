@@ -1,6 +1,7 @@
 package com.buyukkaya.blogappapi.blogpost.model.entity;
 
 import com.buyukkaya.blogappapi.user.model.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Data
+
 public class Blog {
 
     @Id
@@ -32,6 +34,7 @@ public class Blog {
     @Column(name = "created_at")
     private String createdAt;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userEntity_id")
     private UserEntity userEntity;

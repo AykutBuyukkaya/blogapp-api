@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -68,7 +69,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ApiResponse findUserByUsername(String username) throws UsernameNotFoundException {
+    public ApiResponse findUserByUsername(String username) {
         try {
             return ApiResponse.builder()
                     .status(HttpStatus.OK)
@@ -95,11 +96,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ApiResponse updateUser(Long id, RegisterRequest registerRequest) {
+    public ApiResponse updateUser(String username, RegisterRequest registerRequest) {
 
         try {
 
-            UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Usee with given id " + id + " is not found."));
+            UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with given username " + username + " is not found."));
 
             //Only the user or an admin can update user info.
             if (registerRequest.getUsername().equals(user.getUsername())) {
@@ -141,6 +142,27 @@ public class UserServiceImp implements UserService {
         }
     }
 
+    @Override
+    @Transactional
+    public ApiResponse deleteUser(String username) {
+
+        try {
+
+            userRepository.deleteByUsername(username);
+
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK)
+                    .message("User " + username + " deleted successfully")
+                    .build();
+
+
+        } catch (Exception e) {
+            return createResponseWithException(e.getMessage());
+        }
+
+
+    }
+
 
     private void checkIfEmailOrUsernameExist(RegisterRequest registerRequest) throws UsernameExistException, EMailExistException {
 
@@ -156,6 +178,8 @@ public class UserServiceImp implements UserService {
     }
 
     private ApiResponse createResponseWithException(String message) {
+
+        log.error(message);
 
         return ApiResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

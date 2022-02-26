@@ -101,15 +101,19 @@ public class BlogServiceImp implements BlogService {
     @Override
     public ApiResponse getUserBlogs(int page, int size, String sortDirection, String sortTo, String username) {
 
-        UserEntity userEntity = (UserEntity) userService.findUserByUsername(username).getResponse();
+        try {
 
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortTo));
+            UserEntity userEntity = (UserEntity) userService.findUserByUsername(username).getResponse();
 
-        return ApiResponse.builder()
-                .status(HttpStatus.OK)
-                .response(blogRepository.findAllByUserEntity(userEntity, pageRequest))
-                .build();
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortTo));
 
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK)
+                    .response(blogRepository.findAllByUserEntity(userEntity, pageRequest))
+                    .build();
+        } catch (Exception e) {
+            return createResponseWithException(e.getMessage());
+        }
     }
 
     @Override
@@ -151,7 +155,7 @@ public class BlogServiceImp implements BlogService {
 
             return ApiResponse.builder()
                     .status(HttpStatus.OK)
-                    .message("Blog with id" + id + " deleted successfully")
+                    .message("Blog with id " + id + " deleted successfully")
                     .build();
 
         } catch (Exception e) {
