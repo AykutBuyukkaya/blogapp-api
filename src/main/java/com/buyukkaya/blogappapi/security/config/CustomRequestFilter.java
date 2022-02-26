@@ -29,6 +29,8 @@ public class CustomRequestFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
 
+    //This method will filter every incoming request unless it is permitted to anonymous from security config.
+    //This method will look for an Authorization header and parse the token if it exists.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 

@@ -33,9 +33,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        //CustomRequestFilter will filter every incoming request and check for a Json Web Token.
         http.csrf().disable()
                 .addFilterBefore(new CustomRequestFilter(jwtConfiguration, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
+                //These urls will be allowed to accessed by anonymous.
                 .antMatchers("/api-docs/**").permitAll()
                 .antMatchers("/api/authentication/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
@@ -55,6 +58,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
+                //These urls will not be filtered by CustomRequestFilter.
                 .antMatchers("/api-docs/**")
                 .antMatchers("/api/authentication/**")
                 .antMatchers("/h2-console/**");

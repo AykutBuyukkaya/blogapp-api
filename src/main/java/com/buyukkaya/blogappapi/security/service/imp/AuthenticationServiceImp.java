@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.naming.NoPermissionException;
@@ -50,22 +51,22 @@ public class AuthenticationServiceImp implements AuthenticationService {
                     .message(e.getMessage())
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
-
         }
     }
 
+    //Just a security addition for if a middleware had captured a JWT token and tries to use this token against other users.
     @Override
     public boolean checkUserAuthentication(String username) throws UserNotAuthenticatedException {
 
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) {
             return true;
         }
-
-        log.error("Username " + username + " does not match with the username on jwt.");
+        log.error("Username {} does not match with the username on jwt.", username);
         throw new UserNotAuthenticatedException("Username " + username + " does not match with the username on jwt.");
 
     }
 
+    //On a public api, there might be a service that only an admin account can access. For example getAllUsers from authentication api.
     @Override
     public void isUserAdmin() throws NoPermissionException {
 
@@ -73,6 +74,8 @@ public class AuthenticationServiceImp implements AuthenticationService {
                 SecurityContextHolder.getContext().getAuthentication()
                         .getAuthorities().stream()
                         .noneMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            log.warn("User " + ((UserDetails) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal()).getUsername() + " has tried to access an admin api.");
             throw new NoPermissionException("Only an admin account can send this request!");
         }
     }

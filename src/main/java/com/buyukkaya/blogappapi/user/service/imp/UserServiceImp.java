@@ -30,8 +30,6 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class UserServiceImp implements UserService {
 
-    //TODO: SURROUND EVERYTHING WITH TRY CATCH OVER ALL CODE.
-
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -41,7 +39,6 @@ public class UserServiceImp implements UserService {
     @Override
     public ApiResponse registerUser(RegisterRequest registerRequest) {
         try {
-
 
             checkIfEmailOrUsernameExist(registerRequest);
 
@@ -94,6 +91,35 @@ public class UserServiceImp implements UserService {
 
         userEntity.getPosts().add(blog);
         userRepository.save(userEntity);
+
+    }
+
+    @Override
+    public ApiResponse updateUser(Long id, RegisterRequest registerRequest) {
+
+        try {
+
+            UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Usee with given id " + id + " is not found."));
+
+            //Only the user or an admin can update user info.
+            if (registerRequest.getUsername().equals(user.getUsername())) {
+                authenticationService.isUserAdmin();
+            }
+            checkIfEmailOrUsernameExist(registerRequest);
+
+            user.setUsername(registerRequest.getUsername());
+            user.setEmail(registerRequest.getUsername());
+
+            userRepository.save(user);
+
+            return ApiResponse.builder()
+                    .message("User " + registerRequest.getUsername() + " updated successfully")
+                    .status(HttpStatus.OK)
+                    .build();
+        } catch (Exception e) {
+            return createResponseWithException(e.getMessage());
+        }
+
 
     }
 

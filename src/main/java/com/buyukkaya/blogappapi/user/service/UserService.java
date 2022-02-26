@@ -10,8 +10,9 @@ public interface UserService {
 
     ApiResponse findUserByUsername(String username);
 
-
     void addBlogToUser(String username, Blog blog);
+
+    ApiResponse updateUser(Long id, RegisterRequest registerRequest);
 
     ApiResponse getAllUsers(int page, int size, String sortDirection, String sortTo);
 

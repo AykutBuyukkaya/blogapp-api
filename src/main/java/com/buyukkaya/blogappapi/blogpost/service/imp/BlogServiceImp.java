@@ -124,6 +124,8 @@ public class BlogServiceImp implements BlogService {
 
             blogRepository.save(blog);
 
+            log.info("Blogpost with id {} updated successfully", id);
+
             return ApiResponse.builder()
                     .status(HttpStatus.OK)
                     .message("Post with id " + id + " successfully updated.")
@@ -145,6 +147,8 @@ public class BlogServiceImp implements BlogService {
 
             blogRepository.deleteById(id);
 
+            log.info("Blogpost with id {} deleted successfully.", id);
+
             return ApiResponse.builder()
                     .status(HttpStatus.OK)
                     .message("Blog with id" + id + " deleted successfully")
@@ -159,6 +163,8 @@ public class BlogServiceImp implements BlogService {
 
 
     private ApiResponse createResponseWithException(String message) {
+
+        log.error(message);
 
         return ApiResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

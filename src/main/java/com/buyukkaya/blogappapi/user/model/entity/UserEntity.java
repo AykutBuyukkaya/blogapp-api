@@ -24,15 +24,16 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
+    @Column(name = "username", unique = true)
+    @Size(min = 3, max = 16)
+    private String username;
+
     @Email
     @NonNull
     @Column(name = "email", unique = true)
     private String email;
 
-    @NonNull
-    @Column(name = "username", unique = true)
-    @Size(min = 3, max = 16)
-    private String username;
 
     @NonNull
     @Column(name = "password")
